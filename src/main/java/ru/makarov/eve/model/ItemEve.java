@@ -11,9 +11,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-//todo Не под все Id работает - надо унифицировть модель
 public class ItemEve {
-    private Integer capacity;
+    private Float capacity;
     private String description;
     @JsonProperty(value = "dogma_attributes")
     @JsonIgnore
@@ -25,6 +24,8 @@ public class ItemEve {
     private Integer graphicId;
     @JsonProperty(value = "group_id")
     private Integer groupId;
+    @JsonProperty(value = "icon_id")
+    private Integer iconId;
     @JsonProperty(value = "market_group_id")
     private Integer marketGroupId;
     private Integer mass;
