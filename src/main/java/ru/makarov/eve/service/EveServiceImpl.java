@@ -3,16 +3,12 @@ package ru.makarov.eve.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpStatusCodeException;
-import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
+import ru.makarov.eve.exception.CustomEveException;
 import ru.makarov.eve.model.ItemEve;
-
-import java.util.NoSuchElementException;
-import java.util.Objects;
 
 @Slf4j
 @Service
@@ -41,7 +37,7 @@ public class EveServiceImpl implements EveService {
             responseEntity = restTemplate.getForEntity(url, responseClass);
 
         } catch (HttpStatusCodeException e) {
-            throw new NoSuchElementException();
+            throw new CustomEveException(e);
         }
 
         return responseEntity.getBody();

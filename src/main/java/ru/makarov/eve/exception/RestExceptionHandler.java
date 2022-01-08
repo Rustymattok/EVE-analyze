@@ -15,11 +15,10 @@ import ru.makarov.eve.model.error.ApiErrorsView;
 import java.util.Collections;
 import java.util.NoSuchElementException;
 
-import static ru.makarov.eve.exception.ErrorMessages.SERVER_ERROR_MSG;
+import static ru.makarov.eve.exception.ErrorMessages.*;
 
 @Slf4j
 @ControllerAdvice
-//todo доделать обработчик ошибок
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @Autowired
@@ -28,19 +27,30 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(NoSuchElementException.class)
     protected ResponseEntity<Object> notFound(NoSuchElementException e) {
 
-        return buildApiGlobalErrorResponseEntity(e.getMessage(), HttpStatus.NOT_FOUND, SERVER_ERROR_MSG);
+        return buildApiGlobalErrorResponseEntity(e.getMessage(), HttpStatus.NOT_FOUND, SERVER_NOTFOUND_MSG);
     }
 
-    @ExceptionHandler({HttpStatusCodeException.class})
+    @ExceptionHandler({CustomEveException.class})
     protected ResponseEntity<Object> serviceUnavailable(HttpStatusCodeException e) {
-        log.error("Exception occurred: ", e);
 
         switch (e.getStatusCode()) {
             case NOT_FOUND:
                 return buildApiGlobalErrorResponseEntity(
                         e.getMessage(),
-                        HttpStatus.INTERNAL_SERVER_ERROR,
-                        SERVER_ERROR_MSG);
+                        HttpStatus.NOT_FOUND,
+                        SERVER_NOTFOUND_MSG);
+
+            case BAD_REQUEST:
+                return buildApiGlobalErrorResponseEntity(
+                        e.getMessage(),
+                        HttpStatus.BAD_REQUEST,
+                        SERVER_BAD_REQUEST);
+
+            case GATEWAY_TIMEOUT:
+                return buildApiGlobalErrorResponseEntity(
+                        e.getMessage(),
+                        HttpStatus.GATEWAY_TIMEOUT,
+                        SERVER_TIMEOUT);
             default:
                 return buildApiGlobalErrorResponseEntity(
                         e.getMessage(),
@@ -49,7 +59,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         }
     }
 
-    public ResponseEntity<Object> buildApiGlobalErrorResponseEntity(
+    private ResponseEntity<Object> buildApiGlobalErrorResponseEntity(
             ApiGlobalError apiGlobalError,
             HttpStatus httpStatus,
             String error) {

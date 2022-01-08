@@ -28,7 +28,7 @@ public class ItemEve {
     private Integer iconId;
     @JsonProperty(value = "market_group_id")
     private Integer marketGroupId;
-    private Integer mass;
+    private Float mass;
     private String name;
     @JsonProperty(value = "packaged_volume")
     private Integer packagedVolume;
