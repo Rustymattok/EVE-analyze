@@ -9,6 +9,9 @@ import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 import ru.makarov.eve.exception.CustomEveException;
 import ru.makarov.eve.model.ItemEve;
+import ru.makarov.eve.model.RegionEve;
+
+import java.util.List;
 
 @Slf4j
 @Service
@@ -18,6 +21,7 @@ public class EveServiceImpl implements EveService {
     //todo вынести в отдельный файл все методы и туда ссылаться
     private final String baseUrl = "https://esi.evetech.net/latest/";
     private final String TYPE = "/universe/types/";
+    private final String REGIONS = "/universe/regions/";
 
     @Autowired
     public EveServiceImpl(RestTemplateBuilder builder) {
@@ -29,6 +33,22 @@ public class EveServiceImpl implements EveService {
         String url = baseUrl + TYPE + idType;
 
         return getCall(url, ItemEve.class);
+    }
+
+    @Override
+    public List<Integer> getIdRegions() {
+        String url = baseUrl + REGIONS;
+        //todo посмотреть как изящней сделать
+        List<Integer> listResponse =  getCall(url, List.class);
+
+        return listResponse;
+    }
+
+    @Override
+    public RegionEve getRegionById(String idRegion) {
+        String url = baseUrl + REGIONS + idRegion;
+
+        return getCall(url, RegionEve.class);
     }
 
     private  <T, R extends T> T getCall(String url, Class<R> responseClass) {
