@@ -1,4 +1,4 @@
-package ru.makarov.eve.model;
+package ru.makarov.eve.model.eve;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;

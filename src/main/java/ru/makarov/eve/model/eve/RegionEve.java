@@ -1,4 +1,4 @@
-package ru.makarov.eve.model;
+package ru.makarov.eve.model.eve;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
